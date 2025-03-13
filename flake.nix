@@ -20,6 +20,10 @@
           hello = pkgs.hello;
           default = hello;
         };
+
+        devShells.default = pkgs.mkShell {
+          buildInputs = with pkgs; [ just ];
+        };
       }
     );
 }
