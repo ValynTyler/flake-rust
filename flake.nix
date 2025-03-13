@@ -12,9 +12,12 @@
     };
   };
 
-  outputs = { self, nixpkgs, flake-utils, ... }:
+  outputs = { self, nixpkgs, flake-utils, rust-overlay, ... }:
     flake-utils.lib.eachDefaultSystem (system:
-      let pkgs = nixpkgs.legacyPackages.${system}; in
+      let
+        overlays = [ (import rust-overlay) ];
+        pkgs = import nixpkgs { inherit system overlays; };
+      in
       {
         packages = rec {
           hello = pkgs.hello;
@@ -22,7 +25,10 @@
         };
 
         devShells.default = pkgs.mkShell {
-          buildInputs = with pkgs; [ just ];
+          buildInputs = with pkgs; [
+            just
+            rust-bin.nightly.latest.default
+          ];
         };
       }
     );
