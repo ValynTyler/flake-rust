@@ -19,11 +19,6 @@
         pkgs = import nixpkgs { inherit system overlays; };
       in
       {
-        packages = rec {
-          hello = pkgs.hello;
-          default = hello;
-        };
-
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
             just
